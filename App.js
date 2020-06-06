@@ -3,15 +3,37 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 
 export default function App() {
 
-  const [texto, setTexto] = useState('Texto Inicial');
-  const [contador, setContador] = useState(0);
+  const [numeros, setNumeros] = useState(['', '', '', '', '', '']);
+  const historico = [];
+
+  const geraNumeros = () => {
+    setNumeros( numeros.map(indice => geraNumAleatorio()) );
+  }
+
+  function geraNumAleatorio(){
+    var num = (Math.floor(Math.random() * 59) + 1);
+    if (historico.indexOf(num) >= 0) return geraNumAleatorio();
+    historico.push(num);
+    return num;    
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={{marginBottom: 16 }}>{contador}</Text>
+      <View style={{marginBottom: 20}}>
+      {
+        numeros.map( numero => 
+          <View 
+            key={numero.indice}>
+            <Text>
+              {numero}
+            </Text>
+          </View>
+        )
+      }
+      </View>
       <Button
-       title="Alterar texto" 
-       onPress={() => setContador(contador + 1)} />
+       title="Gera Números" 
+       onPress={geraNumeros} />
     </View>
   );
 }
@@ -21,6 +43,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
 });
